@@ -3,21 +3,38 @@
 #include<cstdlib>
 #include<ctime>
 
-Chess::Chess()
-{
-	for (int i = 0; i < 9; i++) 
-	{
-		grid[i] = '.';
-	}
-	
-}
+Chess::Chess() {}
 
 void Chess::human_play()
 {
-	int human_grid;
+	char human_grid;
+
 	std::cout << "请您下棋(输入1~9的数字)：" << std::endl;
 	std::cin >> human_grid;
-	grid[human_grid - 1] = 'O';
+
+	// 检查人类下棋点是否非法
+	while (true)
+	{
+		if (human_grid >= '1' && human_grid <= '9')
+		{
+			if (grid[int(human_grid) - int('1')] == '.')
+			{
+				grid[int(human_grid) - int('1')] = 'O';
+				break;
+			}
+			else
+			{
+				std::cout << "这个地方已经下过棋子了,你是要耍赖吗?：" << std::endl;
+				std::cout << "请您下棋(输入1~9的数字)：" << std::endl;
+				std::cin >> human_grid;
+			}
+		}
+		else 
+		{
+			std::cout << "请您输入1~9的数字!,而不是别的字母!：" << std::endl;
+			std::cin >> human_grid;
+		}		
+	}
 }
 
 void Chess::AI_play()
@@ -39,13 +56,13 @@ bool Chess::check_full()//检查棋盘是不是满了
 {
 	for (int i = 0; i < 9; i++)
 	{
-		if (grid[i] == '.')return false;
+		if (grid[i] == '.') return false;
 	}
 
 	return true;
 }
 
-char Chess::check_win()
+char Chess::check_win()   // 别的方法会调用不能改,否则牵一发动全身!!!!
 {
 	for (int i = 1; i <= 7; i += 3)
 	{
@@ -84,37 +101,17 @@ char Chess::check_win()
 	return '.';
 }
 
-int Chess::who_win()
-{
-	if (check_win() == 'X')
-	{
-		return 2;
-	}
-	if (check_win() == 'O')
-	{
-		return 1;
-	}
-	return 0;
-}
-
 int Chess::AI_think()
 {
 	int AI_grid;
-	char copy_grid[9];
 	srand((unsigned)time(NULL));
-	/*
-	for (int i = 0; i < 9; i++)
-	{
-		copy_grid[i] = grid[i];
-	}
-	*/
 	//调用who_win()那个点电脑会胜利
 	for (int i = 0; i < 9; i++)
 	{
 		if (grid[i] == '.')
 		{
 			grid[i] = 'X';
-			if (who_win() == 2) 
+			if (check_win() == 'X')
 			{
 				grid[i] = '.';
 				return i;
@@ -130,7 +127,7 @@ int Chess::AI_think()
 		if (grid[i] == '.')
 		{
 			grid[i] = 'O';
-			if (who_win() == 1)
+			if (check_win() == 'O')
 			{
 				grid[i] = '.';
 				return i;
