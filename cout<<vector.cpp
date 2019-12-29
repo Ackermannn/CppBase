@@ -23,3 +23,19 @@ int main() {
 	cout << nums << endl;
 	return 0;
 }
+/* cout << vector<string>
+ostream& operator<<(ostream& os, vector<string>& v)
+{
+	os << '[';
+	for (auto iter = v.begin(); iter < v.end() - 1; iter++)
+	{
+		os << '"' << *iter << "\" ," << endl;
+	}
+	os << '"' << *(v.end() - 1) << '"'<< ']';
+	return os;
+}
+//输出格式:
+//	["as",
+//	"fa",
+//	"fa"]
+*/
